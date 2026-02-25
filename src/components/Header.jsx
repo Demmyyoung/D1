@@ -3,21 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function Header({ name = "Damilare" }) {
+export default function Header() {
   const pathname = usePathname();
 
   const navLinks = [
-    { label: "home", href: "/" },
-    { label: "photos", href: "/photos" },
-    { label: "info", href: "/info" },
-    { label: "book me", href: "mailto:bookings@damilare.com" },
+    { label: "talent", href: "/" },
   ];
 
   return (
     <header className="fb-header">
       <div className="fb-header__inner">
         <Link href="/" className="fb-header__logo">
-          [ theportfolio ]
+          [ thearchive ]
         </Link>
 
         <nav className="fb-header__nav">

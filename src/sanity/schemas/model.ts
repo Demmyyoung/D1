@@ -1,0 +1,105 @@
+// Schema: Model — the core identity for each talent profile
+import { defineType, defineField } from "sanity";
+
+export default defineType({
+  name: "model",
+  title: "Model",
+  type: "document",
+  groups: [
+    { name: "info", title: "Info", default: true },
+    { name: "media", title: "Media" },
+    { name: "theme", title: "Theme" },
+  ],
+  fields: [
+    defineField({
+      name: "name",
+      title: "Name",
+      type: "string",
+      group: "info",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "slug",
+      title: "Slug",
+      type: "slug",
+      group: "info",
+      options: { source: "name", maxLength: 96 },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "profileImage",
+      title: "Profile Image",
+      type: "image",
+      group: "media",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "tagline",
+      title: "Tagline",
+      type: "string",
+      group: "info",
+      description: 'e.g. "Model · Creative · Muse"',
+    }),
+    defineField({
+      name: "bio",
+      title: "Bio",
+      type: "text",
+      group: "info",
+      rows: 4,
+    }),
+    defineField({
+      name: "stats",
+      title: "Measurements",
+      type: "object",
+      group: "info",
+      fields: [
+        defineField({ name: "height", title: "Height", type: "string" }),
+        defineField({ name: "bust", title: "Bust", type: "string" }),
+        defineField({ name: "waist", title: "Waist", type: "string" }),
+        defineField({ name: "hips", title: "Hips", type: "string" }),
+        defineField({ name: "shoe", title: "Shoe Size", type: "string" }),
+        defineField({ name: "eyes", title: "Eye Color", type: "string" }),
+        defineField({ name: "hair", title: "Hair Color", type: "string" }),
+      ],
+    }),
+    defineField({
+      name: "agency",
+      title: "Agency",
+      type: "string",
+      group: "info",
+    }),
+    defineField({
+      name: "location",
+      title: "Location",
+      type: "string",
+      group: "info",
+    }),
+    defineField({
+      name: "contact",
+      title: "Contact Email",
+      type: "string",
+      group: "info",
+    }),
+    defineField({
+      name: "joined",
+      title: "Member Since",
+      type: "string",
+      group: "info",
+      description: 'e.g. "February 2026"',
+    }),
+    defineField({
+      name: "themeColor",
+      title: "Theme Color",
+      type: "string",
+      group: "theme",
+      description: "Primary brand color as hex, e.g. #3b5998",
+    }),
+  ],
+  preview: {
+    select: {
+      title: "name",
+      subtitle: "tagline",
+      media: "profileImage",
+    },
+  },
+});

@@ -9,15 +9,34 @@ export default function PhotoGrid({ photos, onPhotoClick }) {
         <div
           key={photo.id}
           className="photo-grid__item"
-          onClick={() => onPhotoClick(photo)}
+          onClick={() => photo.src && onPhotoClick(photo)}
         >
-          <Image
-            src={photo.src}
-            alt={photo.caption}
-            width={300}
-            height={300}
-            className="photo-grid__img"
-          />
+          {photo.src ? (
+            <Image
+              src={photo.src}
+              alt={photo.caption}
+              width={300}
+              height={300}
+              className="photo-grid__img"
+            />
+          ) : (
+            <div 
+              style={{
+                width: "100%", 
+                height: "100%", 
+                background: "#eee", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                textAlign: "center",
+                fontSize: "11px",
+                color: "#aaa",
+                padding: "4px"
+              }}
+            >
+              Missing Image
+            </div>
+          )}
         </div>
       ))}
     </div>

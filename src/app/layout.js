@@ -1,12 +1,10 @@
 import "./globals.css";
 import Header from "@/components/Header";
-import Sidebar from "@/components/Sidebar";
-import profile from "@/data/profile.json";
 
 export const metadata = {
-  title: "Damilare — Portfolio",
+  title: "The Archive — Talent Discovery",
   description:
-    "Professional model portfolio — editorial, campaigns & runway bookings.",
+    "A boutique modeling agency platform. Discover archived talent profiles.",
 };
 
 export default function RootLayout({ children }) {
@@ -15,17 +13,8 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
 
-        {/* Profile Bar — like "Profile (This is you) — Texas A&M" */}
-        <div className="profile-bar">
-          <div className="profile-bar__inner">
-            <span>Profile · {profile.name}</span>
-            <span className="profile-bar__right">{profile.location}</span>
-          </div>
-        </div>
-
-        {/* Main Layout */}
-        <div className="fb-layout">
-          <Sidebar />
+        {/* Main Layout — full width for gallery, archive pages have own sidebar */}
+        <div className="fb-layout fb-layout--full">
           <main className="fb-content">{children}</main>
         </div>
       </body>

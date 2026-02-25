@@ -1,132 +1,100 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import TabNav from "@/components/TabNav";
-import WallPost from "@/components/WallPost";
-import Lightbox from "@/components/Lightbox";
-import photos from "@/data/albums";
-import profile from "@/data/profile.json";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { sanityClient } from "@/sanity/client";
+import { urlFor } from "@/sanity/image";
+import { getAllModels } from "@/sanity/queries";
 
-export default function WallPage() {
-  const [lightboxPhoto, setLightboxPhoto] = useState(null);
+export default function TalentGallery() {
+  const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    sanityClient.fetch(getAllModels).then((data) => {
+      setModels(data || []);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="fb-box">
+        <div className="fb-box__header">Talent Gallery</div>
+        <div className="fb-box__body">
+          <p style={{ padding: "20px", textAlign: "center", color: "#999" }}>
+            Loading profiles...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
-      {/* Profile Top Section — Picture + Info (like the screenshot) */}
-      <div className="profile-top" style={{ marginBottom: "8px" }}>
-        {/* Picture Box */}
-        <div className="fb-box">
-          <div className="fb-box__header">
-            Picture
-            <span className="fb-box__header-edit">[ edit ]</span>
-          </div>
-          <div className="fb-box__body profile-pic-section">
-            <div className="profile-pic-section__image-wrap">
-              <Image
-                src="/photos/IMG_4290.jpg"
-                alt={profile.name}
-                width={200}
-                height={250}
-                className="profile-pic-section__image"
-                priority
-              />
-            </div>
-            <ul className="profile-pic-section__links">
-              <li>
-                <a href="/photos">View My Photos</a>
-              </li>
-              <li>
-                <a href="/info">View My Info</a>
-              </li>
-              <li>
-                <a href={`mailto:${profile.contact}`}>Book Me</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Information Box */}
-        <div className="fb-box">
-          <div className="fb-box__header">
-            Information
-            <span className="fb-box__header-edit">[ edit ]</span>
-          </div>
-          <div className="fb-box__body">
-            <div className="info-table__section-title">Account Info:</div>
-            <div className="info-table__row">
-              <span className="info-table__label">Name:</span>
-              <span className="info-table__value">{profile.name}</span>
-            </div>
-            <div className="info-table__row">
-              <span className="info-table__label">Member Since:</span>
-              <span className="info-table__value">{profile.joined}</span>
-            </div>
-
-            <div
-              className="info-table__section-title"
-              style={{ marginTop: "10px" }}
-            >
-              Basic Info:
-            </div>
-            <div className="info-table__row">
-              <span className="info-table__label">Agency:</span>
-              <span className="info-table__value">{profile.agency}</span>
-            </div>
-            <div className="info-table__row">
-              <span className="info-table__label">Location:</span>
-              <span className="info-table__value">{profile.location}</span>
-            </div>
-            <div className="info-table__row">
-              <span className="info-table__label">Height:</span>
-              <span className="info-table__value">{profile.stats.height}</span>
-            </div>
-
-            <div
-              className="info-table__section-title"
-              style={{ marginTop: "10px" }}
-            >
-              Contact Info:
-            </div>
-            <div className="info-table__row">
-              <span className="info-table__label">Email:</span>
-              <span className="info-table__value">
-                <a href={`mailto:${profile.contact}`}>{profile.contact}</a>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Tabs + Wall */}
-      <TabNav />
       <div className="fb-box">
         <div className="fb-box__header">
-          The Wall
-          <span className="fb-box__header-edit">{photos.length} posts</span>
+          Talent Gallery
+          <span className="fb-box__header-edit">
+            {models.length} archived profiles
+          </span>
         </div>
         <div className="fb-box__body">
-          <div className="wall-intro">
-            Displaying {photos.length} wall posts.
+          <div className="talent-gallery">
+            {models.map((model, i) => (
+              <Link
+                key={model._id}
+                href={`/archive/${model.slug}/login`}
+                className="talent-card"
+              >
+                <motion.div
+                  className="talent-card__inner"
+                  style={model.themeColor ? { "--fb-blue": model.themeColor, borderColor: "var(--fb-blue)" } : {}}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1, duration: 0.4 }}
+                >
+                  <div className="talent-card__image-wrap">
+                    {model.profileImage ? (
+                      <Image
+                        src={urlFor(model.profileImage)
+                          .width(600)
+                          .height(750)
+                          .url()}
+                        alt={model.name}
+                        width={300}
+                        height={375}
+                        className="talent-card__image"
+                      />
+                    ) : (
+                      <div
+                        className="talent-card__image"
+                        style={{
+                          width: 300,
+                          height: 375,
+                          background: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        No Photo
+                      </div>
+                    )}
+                  </div>
+                  <div className="talent-card__info">
+                    <div className="talent-card__name">{model.name}</div>
+                    <div className="talent-card__tagline">{model.tagline}</div>
+                    <div className="talent-card__cta">Access Archive →</div>
+                  </div>
+                </motion.div>
+              </Link>
+            ))}
           </div>
-          {photos.map((photo) => (
-            <WallPost
-              key={photo.id}
-              photo={photo}
-              onImageClick={setLightboxPhoto}
-            />
-          ))}
         </div>
       </div>
-
-      {lightboxPhoto && (
-        <Lightbox
-          photos={photos}
-          currentPhoto={lightboxPhoto}
-          onClose={() => setLightboxPhoto(null)}
-          onNavigate={setLightboxPhoto}
-        />
-      )}
     </>
   );
 }

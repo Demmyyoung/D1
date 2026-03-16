@@ -14,7 +14,7 @@ export default function Header() {
     <header className="fb-header">
       <div className="fb-header__inner">
         <Link href="/" className="fb-header__logo">
-          [ thearchive ]
+          [ d1's archive ]
         </Link>
 
         <nav className="fb-header__nav">

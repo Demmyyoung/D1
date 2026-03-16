@@ -2,7 +2,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 
 export const metadata = {
-  title: "The Archive — Talent Discovery",
+  title: "D1's archive — Talent Discovery",
   description:
     "A boutique modeling agency platform. Discover archived talent profiles.",
 };

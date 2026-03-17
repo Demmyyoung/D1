@@ -33,7 +33,7 @@ export default function WallPost({ photo, model, onImageClick }) {
             width={500}
             height={625}
             className="wall-post__image"
-            style={{ width: "100%", height: "auto", maxWidth: isPolaroid ? "380px" : "420px" }}
+            style={{ width: "100%", height: "auto", maxWidth: "100%" }}
           />
         ) : (
           <div 
